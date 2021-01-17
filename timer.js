@@ -5,8 +5,6 @@ const refs = {
     secsIndicator: document.querySelector('[data-value="secs"]'),
 }
 
-const targetDate = Date.parse('Jul 17, 2021')
-
 const timeCounter = (time) => {
     const days = Math.floor(time / (1000 * 60 * 60 * 24));
     const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -19,10 +17,34 @@ const timeCounter = (time) => {
     refs.secsIndicator.textContent = secs
 }
 
-setInterval(() => {
-const delta = targetDate - Date.now()
-    timeCounter(delta)
-}, 1000)
+function pad(value) {
+  return String(value).padStart(2, '0');
+}
+
+
+class CountdownTimer {
+  constructor({ selector, targetDate }) {
+    this.selector = selector;
+    this.targetDate = targetDate;
+  }
+
+  start() {
+    timeCounter(0);
+
+    setInterval(() => {
+      const delta = this.targetDate - Date.now();
+
+      timeCounter(delta);
+    }, 1000);
+  }
+}
+
+const countdownTimer = new CountdownTimer({
+  selector: '#timer-1',
+  targetDate: new Date('Jul 17, 2021'),
+});
+
+countdownTimer.start();
 
 
 
